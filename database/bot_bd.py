@@ -1,7 +1,6 @@
 import os
 
 from peewee import *
-from datetime import date
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(BASE_DIR, "chat.db")
@@ -11,6 +10,7 @@ db = SqliteDatabase(path)
 class ChatBD(Model):
     data = DateField()
     chat_id = IntegerField()
+    name = CharField()
     text = CharField()
 
     class Meta:
@@ -18,4 +18,4 @@ class ChatBD(Model):
 
 
 if __name__ == '__main__':
-    print(date.today())
+    db.create_tables([ChatBD])
