@@ -1,16 +1,20 @@
 import logging
-from fileinput import FileInput
 from random import random
 from time import sleep
-from xml.dom.minidom import Document
 import requests
 from det_mir.main import FileProcessing
 from settings import TOKEN, scenario, generate_message
 from functools import wraps
-import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, bot, ChatAction
-from telegram.ext import Updater, CommandHandler, \
-    CallbackQueryHandler, CallbackContext, ConversationHandler, MessageHandler, Filters
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    CallbackQueryHandler,
+    CallbackContext,
+    ConversationHandler,
+    MessageHandler,
+    Filters,
+)
 from database.bot_bd import ChatBD
 from datetime import date
 
@@ -25,23 +29,30 @@ def send_typing_action(func):
 
     @wraps(func)
     def command_func(update, context, *args, **kwargs):
-        context.bot.send_chat_action(chat_id=update.effective_message.chat_id, action=ChatAction.TYPING,
-                                     timeout=random() * 2 + 3)
+        context.bot.send_chat_action(
+            chat_id=update.effective_message.chat_id,
+            action=ChatAction.TYPING,
+            timeout=random() * 2 + 3,
+        )
         return func(update, context, *args, **kwargs)
 
     return command_func
 
-
+@send_typing_action
 def start(update: Update, _: CallbackContext) -> None:
-    note = ChatBD.create(data=date.today(),
-                         chat_id=update.message.chat_id,
-                         text='parse command',
-                         name=update.message.from_user)
-    message = "Для парсинга цен на сайтах (ВНИМАНИЕ сайты будут обновляться) отправь команду - '/parse' \n" \
-              "Для формирования этикеток, для отгрузки заказа детского мира, отправь - '/det_mir'"
+    note = ChatBD.create(
+        data=date.today(),
+        chat_id=update.message.chat_id,
+        text="parse command",
+        name=update.message.from_user,
+    )
+    message = (
+        "Для парсинга цен на сайтах (ВНИМАНИЕ сайты будут обновляться) отправь команду - '/parse' \n"
+        "Для формирования этикеток, для отгрузки заказа детского мира, отправь - '/det_mir'"
+    )
     update.message.reply_text(text=message)
 
-
+@send_typing_action
 def det_mir(update: Update, _: CallbackContext) -> int:
     update.message.reply_text("Отправь файл-заявку от десткого мира в формате(!) .xlsx")
     return 1
@@ -50,29 +61,32 @@ def det_mir(update: Update, _: CallbackContext) -> int:
 def get_file(update: Update, _: CallbackContext):
     user = update.message.document
     det_mir_xlsx = update.message.document.get_file()
-    det_mir_xlsx.download('user_file.xlsx')
-    fp = FileProcessing('user_file.xlsx', 'export_file')
+    det_mir_xlsx.download("user_file.xlsx")
+    fp = FileProcessing("bot_engine/user_file.xlsx", "export_file")
     fp.main()
-    update.message.reply_text(text="gВсе хорошо, файл получен, нажми '/get', чтобы получить"
-                              )
+    update.message.reply_text(
+        text="gВсе хорошо, файл получен, нажми '/get', чтобы получить"
+    )
     return 2
 
 
 def send_file(update: Update, _: CallbackContext):
     chat_id = update.message.chat_id
-    file_to_send = {
-        'document': open('export_file.docx', 'rb')
-    }
-    requests.post(f'https://api.telegram.org/bot{TOKEN}/sendDocument?chat_id={chat_id}',
-                  files=file_to_send)
+    file_to_send = {"document": open("bot_engine/export_file.docx", "rb")}
+    requests.post(
+        f"https://api.telegram.org/bot{TOKEN}/sendDocument?chat_id={chat_id}",
+        files=file_to_send,
+    )
 
 
 @send_typing_action
 def parse(update: Update, _: CallbackContext) -> None:
-    note = ChatBD.create(data=date.today(),
-                         chat_id=update.message.chat_id,
-                         text='parse command',
-                         name=update.message.from_user)
+    note = ChatBD.create(
+        data=date.today(),
+        chat_id=update.message.chat_id,
+        text="parse command",
+        name=update.message.from_user,
+    )
     keyboard = [
         [
             InlineKeyboardButton("Первая коляска", callback_data="pervaya_kolyaska"),
@@ -82,16 +96,16 @@ def parse(update: Update, _: CallbackContext) -> None:
             InlineKeyboardButton("Роял кид", callback_data="royal_kids"),
             InlineKeyboardButton("Алло Мама", callback_data="allomama"),
         ],
-        [
-            InlineKeyboardButton("Автодетство", callback_data="avtodetstvo")
-        ]
+        [InlineKeyboardButton("Автодетство", callback_data="avtodetstvo")],
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text("Выбери сайт для парсинга цен.\n"
-                              "Eсли нужно проверить все, отправь команду '/all'",
-                              reply_markup=reply_markup)
+    update.message.reply_text(
+        "Выбери сайт для парсинга цен.\n"
+        "Eсли нужно проверить все, отправь команду '/all'",
+        reply_markup=reply_markup,
+    )
 
 
 @send_typing_action
@@ -101,12 +115,14 @@ def button(update: Update, _: CallbackContext) -> None:
     query.answer()
     error_list = scenario[query.data]()
 
-    note = ChatBD.create(data=date.today(),
-                         chat_id=update.callback_query.message.chat_id,
-                         text=query.data,
-                         name=query.message.from_user)
+    note = ChatBD.create(
+        data=date.today(),
+        chat_id=update.callback_query.message.chat_id,
+        text=query.data,
+        name=query.message.from_user,
+    )
 
-    sleep(random() * 2 + 3.)
+    sleep(random() * 2 + 3.0)
 
     query.edit_message_text(
         text=generate_message(scenario[query.data], error_list),
@@ -131,12 +147,11 @@ def main() -> None:
         entry_points=[CommandHandler("det_mir", det_mir)],
         states={
             1: [MessageHandler(Filters.document, get_file)],
-            2: [CommandHandler("get", send_file)]
+            2: [CommandHandler("get", send_file)],
         },
-        fallbacks=[CommandHandler(
-            'start', start
-        ), ]
-
+        fallbacks=[
+            CommandHandler("start", start),
+        ],
     )
     updater.dispatcher.add_handler(CommandHandler("start", start))
     updater.dispatcher.add_handler(CommandHandler("parse", parse))
