@@ -38,6 +38,7 @@ def send_typing_action(func):
 
     return command_func
 
+
 @send_typing_action
 def start(update: Update, _: CallbackContext) -> None:
     note = ChatBD.create(
@@ -51,6 +52,7 @@ def start(update: Update, _: CallbackContext) -> None:
         "Для формирования этикеток, для отгрузки заказа детского мира, отправь - '/det_mir'"
     )
     update.message.reply_text(text=message)
+
 
 @send_typing_action
 def det_mir(update: Update, _: CallbackContext) -> int:

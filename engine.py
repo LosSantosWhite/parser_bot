@@ -30,7 +30,7 @@ rename_dict_1 = {
     "airetwin": "aire twin",
     "aireskip": "aire skip",
     "serina": "serina 2in1",
-    "stroller pact": "pact"
+    "stroller pact": "pact",
 }
 
 
@@ -80,7 +80,7 @@ def get_product_name(product_name: str, category=None) -> str:
 
 HEADERS = {
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 "
-                  "(KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
+    "(KHTML, like Gecko) Version/14.0.3 Safari/605.1.15",
     "accept": "*/*",
 }
 

@@ -17,5 +17,5 @@ class ChatBD(Model):
         database = db
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     db.create_tables([ChatBD])

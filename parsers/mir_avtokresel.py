@@ -41,11 +41,7 @@ def get_content(html):
 
 
 def parse():
-    return engine.parse(
-        url=URL,
-        get_content=get_content
-    )
-
+    return engine.parse(url=URL, get_content=get_content)
 
 
 if __name__ == "__main__":
