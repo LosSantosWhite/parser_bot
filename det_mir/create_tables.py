@@ -5,31 +5,32 @@ from docx.shared import Cm, Pt
 
 
 def keep_table_on_one_page(doc):
-    tags = doc.element.xpath('//w:tr[position() < last()]/w:tc/w:p')
+    tags = doc.element.xpath("//w:tr[position() < last()]/w:tc/w:p")
     for tag in tags:
         ppr = tag.get_or_add_pPr()
         ppr.keepNext_val = True
 
 
-def add_style_to_table(table, size=22, WD_ALIGN_VERTICAL=None):  # центрирует текст во всех ячейках
+def add_style_to_table(
+    table, size=22, WD_ALIGN_VERTICAL=None
+):  # центрирует текст во всех ячейках
     font = table.style.font
-    font.name = 'Liberation Serif'
+    font.name = "Liberation Serif"
     font.size = Pt(size)
     for col in table.columns:
         for cell in col.cells:
             cell.paragraphs[0].alignment = docx.enum.text.WD_PARAGRAPH_ALIGNMENT.CENTER
-            # cell.vertical_alignment = docx.enum.table.WD_CELL_VERTICAL_ALIGNMENT
+            cell.vertical_alignment = docx.enum.table.WD_CELL_VERTICAL_ALIGNMENT
 
 
-def create_high_table(document, supplier_name, order_num, destination, current_position):
+def create_high_table(
+    document, supplier_name, order_num, destination, current_position
+):
     table = document.add_table(1, 1)
-    table_params = (supplier_name,
-                    order_num,
-                    destination,
-                    current_position)
-    table.style = 'Table Grid'
+    table_params = (supplier_name, order_num, destination, current_position)
+    table.style = "Table Grid"
     # Установка ширины таблицы == 16 см
-    table.rows[0].cells[0].text = 'Маркетплейс'
+    table.rows[0].cells[0].text = "Маркетплейс"
     # Заполнение таблицы данными поставщика и тд.
     for param in table_params:
         row_cell = table.add_row().cells
@@ -45,13 +46,15 @@ def create_high_table(document, supplier_name, order_num, destination, current_p
     keep_table_on_one_page(document)
 
 
-def create_bottom_table(document, barcode, model_number, product_name, quantity='1', break_flag=True):
+def create_bottom_table(
+    document, barcode, model_number, product_name, quantity="1", break_flag=True
+):
     new_table = document.add_table(rows=2, cols=4)
-    new_table.style = 'Table Grid'
-    new_table.rows[0].cells[0].text = 'Код товара'
-    new_table.rows[0].cells[1].text = 'Артикул'
-    new_table.rows[0].cells[2].text = 'Наименование'
-    new_table.rows[0].cells[3].text = 'Кол-во'
+    new_table.style = "Table Grid"
+    new_table.rows[0].cells[0].text = "Код товара"
+    new_table.rows[0].cells[1].text = "Артикул"
+    new_table.rows[0].cells[2].text = "Наименование"
+    new_table.rows[0].cells[3].text = "Кол-во"
 
     # Заполнение строчки товара
     new_table.rows[1].cells[0].text = barcode
@@ -71,10 +74,11 @@ def create_bottom_table(document, barcode, model_number, product_name, quantity=
     keep_table_on_one_page(document)
     if break_flag:
         document.add_paragraph()
+        #flag
     add_style_to_table(new_table, size=14)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     doc = Document()
-    create_bottom_table(doc, 'as', 'asdas', 'asdas', 'asdasd')
-    doc.save('test.docx')
+    create_bottom_table(doc, "as", "asdas", "asdas", "asdasd")
+    doc.save("test.docx")
