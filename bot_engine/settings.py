@@ -3,7 +3,8 @@ import parsers.royal_kids as rk
 import parsers.mir_avtokresel as mk
 import parsers.allomama as am
 import parsers.avtodetstvo as at
-from defaultsettings import TOKEN
+
+TOKEN = "1637081624:AAGBlnEcbhOnLQHyMyuomJPggrsqr0H5oQo"
 
 
 def generate_message(func, errors: list) -> str:
