@@ -5,7 +5,10 @@ import requests
 from det_mir.main import FileProcessing
 from bot_engine.settings import TOKEN, scenario, generate_message
 from functools import wraps
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, bot, ChatAction
+try:
+    from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatAction
+except ImportError:
+    pass
 from telegram.ext import (
     Updater,
     CommandHandler,
