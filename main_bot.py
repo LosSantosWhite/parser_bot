@@ -139,7 +139,7 @@ def help_command(update: Update, _: CallbackContext) -> None:
 
 
 # @send_typing_action
-def all_command(updat
+def all_command(update: Update, _: CallbackContext):
     for message in scenario["all"]():
         update.message.reply_text(text=message, disable_web_page_preview=True)
 
