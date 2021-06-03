@@ -5,10 +5,8 @@ import requests
 from det_mir.main import FileProcessing
 from bot_engine.settings import TOKEN, scenario, generate_message
 from functools import wraps
-try:
-    from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatAction
-except ImportError:
-    pass
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatAction
+
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -27,22 +25,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def send_typing_action(func):
-    """Sends typing action while processing func command."""
+# def send_typing_action(func):
+#     """Sends typing action while processing func command."""
+#
+#     @wraps(func)
+#     def command_func(update, context, *args, **kwargs):
+#         context.bot.send_chat_action(
+#             chat_id=update.effective_message.chat_id,
+#             action=ChatAction.TYPING,
+#             timeout=random() * 2 + 3,
+#         )
+#         return func(update, context, *args, **kwargs)
+#
+#     return command_func
 
-    @wraps(func)
-    def command_func(update, context, *args, **kwargs):
-        context.bot.send_chat_action(
-            chat_id=update.effective_message.chat_id,
-            action=ChatAction.TYPING,
-            timeout=random() * 2 + 3,
-        )
-        return func(update, context, *args, **kwargs)
 
-    return command_func
-
-
-@send_typing_action
+# @send_typing_action
 def start(update: Update, _: CallbackContext) -> None:
     note = ChatBD.create(
         data=date.today(),
@@ -57,7 +55,7 @@ def start(update: Update, _: CallbackContext) -> None:
     update.message.reply_text(text=message)
 
 
-@send_typing_action
+# @send_typing_action
 def det_mir(update: Update, _: CallbackContext) -> int:
     update.message.reply_text("Отправь файл-заявку от десткого мира в формате(!) .xlsx")
     return 1
@@ -84,9 +82,9 @@ def send_file(update: Update, _: CallbackContext):
     )
 
 
-@send_typing_action
+# @send_typing_action
 def parse(update: Update, _: CallbackContext) -> None:
-    note = ChatBD.create(
+    ChatBD.create(
         data=date.today(),
         chat_id=update.message.chat_id,
         text="parse command",
@@ -113,7 +111,7 @@ def parse(update: Update, _: CallbackContext) -> None:
     )
 
 
-@send_typing_action
+# @send_typing_action
 def button(update: Update, _: CallbackContext) -> None:
     query = update.callback_query
 
@@ -135,13 +133,13 @@ def button(update: Update, _: CallbackContext) -> None:
     )
 
 
-@send_typing_action
+# @send_typing_action
 def help_command(update: Update, _: CallbackContext) -> None:
     update.message.reply_text("Используй /start для начала парсинга")
 
 
-@send_typing_action
-def all_command(update: Update, _: CallbackContext):
+# @send_typing_action
+def all_command(updat
     for message in scenario["all"]():
         update.message.reply_text(text=message, disable_web_page_preview=True)
 
