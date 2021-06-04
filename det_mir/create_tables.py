@@ -20,7 +20,7 @@ def add_style_to_table(
     for col in table.columns:
         for cell in col.cells:
             cell.paragraphs[0].alignment = docx.enum.text.WD_PARAGRAPH_ALIGNMENT.CENTER
-            cell.vertical_alignment = docx.enum.table.WD_CELL_VERTICAL_ALIGNMENT
+            # cell.vertical_alignment = docx.enum.table.WD_CELL_VERTICAL_ALIGNMENT
 
 
 def create_high_table(
