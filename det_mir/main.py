@@ -1,3 +1,5 @@
+import os.path
+
 from docx import Document
 from openpyxl import load_workbook
 
@@ -7,7 +9,7 @@ from det_mir.create_tables import create_high_table, create_bottom_table
 class FileProcessing:
     def __init__(self, file_name, export_file_name):
         self.file = file_name
-        self.export_name = export_file_name
+        self.export_name = os.path.join("parser_bot", export_file_name)
         self.supplier_name = None
         self.order_num = None
         self.total_quantity = None

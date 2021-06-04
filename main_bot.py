@@ -1,11 +1,12 @@
 import logging
 import os.path
+from functools import wraps
 from random import random
 from time import sleep
 import requests
 from det_mir.main import FileProcessing
 from bot_engine.settings import TOKEN, scenario, generate_message
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatAction
 
 from telegram.ext import (
     Updater,
@@ -25,22 +26,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# def send_typing_action(func):
-#     """Sends typing action while processing func command."""
-#
-#     @wraps(func)
-#     def command_func(update, context, *args, **kwargs):
-#         context.bot.send_chat_action(
-#             chat_id=update.effective_message.chat_id,
-#             action=ChatAction.TYPING,
-#             timeout=random() * 2 + 3,
-#         )
-#         return func(update, context, *args, **kwargs)
-#
-#     return command_func
+def send_typing_action(func):
+    """Sends typing action while processing func command."""
+
+    @wraps(func)
+    def command_func(update, context, *args, **kwargs):
+        context.bot.send_chat_action(
+            chat_id=update.effective_message.chat_id,
+            action=ChatAction.TYPING,
+            timeout=random() * 2 + 3,
+        )
+        return func(update, context, *args, **kwargs)
+
+    return command_func
 
 
-# @send_typing_action
+@send_typing_action
 def start(update: Update, _: CallbackContext) -> None:
     note = ChatBD.create(
         data=date.today(),
@@ -49,13 +50,13 @@ def start(update: Update, _: CallbackContext) -> None:
         name=update.message.from_user,
     )
     message = (
-        "Для парсинга цен на сайтах (ВНИМАНИЕ сайты будут обновляться) отправь команду - '/parse' \n"
-        "Для формирования этикеток, для отгрузки заказа детского мира, отправь - '/det_mir'"
+        "/parse – парсинг цен по сайтам, будут дополняться \n"
+        "/det_mir – для работы с детским миром \n"
     )
     update.message.reply_text(text=message)
 
 
-# @send_typing_action
+@send_typing_action
 def det_mir(update: Update, _: CallbackContext) -> int:
     update.message.reply_text("Отправь файл-заявку от десткого мира в формате(!) .xlsx")
     return 1
@@ -76,14 +77,15 @@ def get_file(update: Update, _: CallbackContext):
 
 def send_file(update: Update, _: CallbackContext):
     chat_id = update.message.chat_id
-    file_to_send = {"document": open("bot_engine/export_file.docx", "rb")}
+    path_file = os.path.join("parser_bot", "export_file.docx")
+    file_to_send = {"document": open(path_file, "rb")}
     requests.post(
         f"https://api.telegram.org/bot{TOKEN}/sendDocument?chat_id={chat_id}",
         files=file_to_send,
     )
 
 
-# @send_typing_action
+@send_typing_action
 def parse(update: Update, _: CallbackContext) -> None:
     ChatBD.create(
         data=date.today(),
