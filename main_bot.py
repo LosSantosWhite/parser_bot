@@ -1,11 +1,11 @@
 import logging
+import os.path
 from random import random
 from time import sleep
 import requests
 from det_mir.main import FileProcessing
 from bot_engine.settings import TOKEN, scenario, generate_message
-from functools import wraps
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ChatAction
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 
 from telegram.ext import (
     Updater,
@@ -64,8 +64,9 @@ def det_mir(update: Update, _: CallbackContext) -> int:
 def get_file(update: Update, _: CallbackContext):
     user = update.message.document
     det_mir_xlsx = update.message.document.get_file()
-    det_mir_xlsx.download("user_file.xlsx")
-    fp = FileProcessing("bot_engine/user_file.xlsx", "export_file")
+    det_mir_xlsx.download(os.path.join("telegram_parser_bot", "user_file.xlsx"))
+    file_path = os.path.join("telegram_parser_bot", "user_file.xlsx")
+    fp = FileProcessing(file_path, "export_file")
     fp.main()
     update.message.reply_text(
         text="gВсе хорошо, файл получен, нажми '/get', чтобы получить"
