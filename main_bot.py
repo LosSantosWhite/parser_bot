@@ -64,8 +64,8 @@ def det_mir(update: Update, _: CallbackContext) -> int:
 def get_file(update: Update, _: CallbackContext):
     user = update.message.document
     det_mir_xlsx = update.message.document.get_file()
-    det_mir_xlsx.download(os.path.join("telegram_parser_bot", "user_file.xlsx"))
-    file_path = os.path.join("telegram_parser_bot", "user_file.xlsx")
+    det_mir_xlsx.download(os.path.join("parser_bot", "user_file.xlsx"))
+    file_path = os.path.join("parser_bot", "user_file.xlsx")
     fp = FileProcessing(file_path, "export_file")
     fp.main()
     update.message.reply_text(

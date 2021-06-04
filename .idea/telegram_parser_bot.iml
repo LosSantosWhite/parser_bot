@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/models" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/database" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Errors" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/bot_engine" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/parsers" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/det_mir" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/venv" />
+    <content url="file://$MODULE_DIR$/../telegram_parser_bot">
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/models" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/database" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/Errors" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/bot_engine" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/parsers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../telegram_parser_bot/det_mir" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../telegram_parser_bot/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (telegram_parser_bot)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

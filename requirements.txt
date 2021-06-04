@@ -4,7 +4,6 @@ beautifulsoup4==4.9.3
 bs4==0.0.1
 certifi==2020.12.5
 chardet==4.0.0
-docx==0.2.4
 et-xmlfile==1.1.0
 flake8==3.9.2
 flake8-bugbear==21.4.3
