@@ -3,8 +3,10 @@ import parsers.royal_kids as rk
 import parsers.mir_avtokresel as mk
 import parsers.allomama as am
 import parsers.avtodetstvo as at
-
-TOKEN = "1637081624:AAGBlnEcbhOnLQHyMyuomJPggrsqr0H5oQo"
+try:
+    from setting import TOKEN
+except ImportError:
+    exit('Do cp settings.py.default and set token')
 
 
 def generate_message(func, errors: list) -> str:
