@@ -3,10 +3,7 @@ import parsers.royal_kids as rk
 import parsers.mir_avtokresel as mk
 import parsers.allomama as am
 import parsers.avtodetstvo as at
-try:
-    from setting import TOKEN
-except ImportError:
-    exit('Do cp settings.py.default and set token')
+from bot_token import TOKEN
 
 
 def generate_message(func, errors: list) -> str:
